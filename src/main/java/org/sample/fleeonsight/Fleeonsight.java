@@ -2,6 +2,7 @@ package org.sample.fleeonsight;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.entity.ai.NoPenaltyTargeting;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -57,14 +58,12 @@ public class Fleeonsight implements ModInitializer {
         double distance = Math.sqrt(dx * dx + dz * dz);
 
         if (distance > 0 && distance < DETECTION_RANGE) {
-            double normalizedX = (dx / distance) * FLEE_SPEED;
-            double normalizedZ = (dz / distance) * FLEE_SPEED;
-            sheep.setVelocity(normalizedX, sheep.getVelocity().y, normalizedZ);
-            sheep.velocityModified = true;
-            float yaw = (float) (Math.atan2(normalizedZ, normalizedX) * 180.0 / Math.PI) - 90.0F;
-            sheep.setYaw(yaw);
-            sheep.setBodyYaw(yaw);
-            sheep.setHeadYaw(yaw);
+            sheep.setAttacker(player);
+
         }
     }
+
+    
 }
+
+
