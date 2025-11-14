@@ -3,6 +3,7 @@ package org.sample.fleeonsight;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.ai.NoPenaltyTargeting;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -13,14 +14,14 @@ import net.minecraft.util.math.Vec3d;
 import java.util.List;
 
 public class Fleeonsight implements ModInitializer {
-    public static final String MOD_ID = "sheepflee";
+    public static final String MOD_ID = "Animalflee";
     private static final double DETECTION_RANGE = 8.0;
     private static final double FLEE_SPEED = 0.25;
 
     @Override
     public void onInitialize() {
         ServerTickEvents.END_WORLD_TICK.register(this::onWorldTick);
-        System.out.println("Sheep Flee Mod initialized!");
+        System.out.println("Animal Flee Mod initialized!");
     }
 
     private void onWorldTick(ServerWorld world) {
@@ -37,33 +38,33 @@ public class Fleeonsight implements ModInitializer {
                     player.getZ() + DETECTION_RANGE
             );
 
-            List<SheepEntity> nearbyShee = world.getEntitiesByClass(
-                    SheepEntity.class,
+            List<AnimalEntity> nearbyanimal = world.getEntitiesByClass(
+                    AnimalEntity.class,
                     detectionBox,
                     sheep -> sheep.isAlive()
             );
 
-            for (SheepEntity sheep : nearbyShee) {
-                fleeSheepFromPlayer(sheep, player);
+            for (AnimalEntity animal : nearbyanimal) {
+                fleeSheepFromPlayer(animal, player);
             }
         }
     }
 
-    private void fleeSheepFromPlayer(SheepEntity sheep, PlayerEntity player) {
-        Vec3d sheepPos = sheep.getPos();
+    private void fleeSheepFromPlayer(AnimalEntity animal, PlayerEntity player) {
+        Vec3d animalPos = animal.getPos();
         Vec3d playerPos = player.getPos();
 
-        double dx = sheepPos.x - playerPos.x;
-        double dz = sheepPos.z - playerPos.z;
+        double dx = animalPos.x - playerPos.x;
+        double dz = animalPos.z - playerPos.z;
         double distance = Math.sqrt(dx * dx + dz * dz);
 
         if (distance > 0 && distance < DETECTION_RANGE) {
-            sheep.setAttacker(player);
+            animal.setAttacker(player);
 
         }
     }
 
-    
+
 }
 
 
